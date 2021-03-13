@@ -1,0 +1,49 @@
+{
+  "variables": {
+    "GCC_VERSION": "7.3.0"
+  },
+  "ndk_toolchain": {
+    "compiler": "gcc",
+    "version": "<(GCC_VERSION)"
+  },
+  "app": {
+    "stl": "gnustdc++_shared",
+    "debuggable":"true",
+    "cppflags":["-std=c++17"],
+    "abi": [
+      "arm64-v8a"
+    ]
+  },
+
+  "targets": [
+    {
+      "target_name": "sample",
+      "type": "shared_library",
+      "src_dirs": ["src" ],
+      "ldflags": ["-ljsni" ],
+      "dependencies": ["carserviceapi","carapi"]
+
+    },
+    {
+      "target_name": "carapi",
+      "type": "prebuilt_shared_library",
+      "libs_root_dir": "../prebuilt/lib/native",
+      "direct_dependent_settings": {
+        "include_dirs": [
+          "../prebuilt/native/include"
+        ]
+      }
+    },
+    {
+      "target_name": "carserviceapi",
+      "type": "prebuilt_shared_library",
+      "libs_root_dir": "../prebuilt/lib/native",
+      "direct_dependent_settings": {
+        "include_dirs": [
+          "../prebuilt/native/include"
+        ]
+      }
+    }
+
+    ]
+}

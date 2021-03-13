@@ -1,0 +1,29 @@
+all:
+	@:
+TARGET_CFLAGS := 
+TARGET_CXXFLAGS := 
+SRC_FILES := 
+SUFFIX := 
+
+OBJ_FILES := $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.$(SUFFIX)=.o))
+INCLUDE_OPTION := $(addprefix -I, $(INCLUDE_DIR))
+
+CFLAGS := $(TARGET_CFLAGS) $(INCLUDE_OPTION)
+CXXFLAGS := $(TARGET_CXXFLAGS)
+
+ifdef COMPILER_C
+COMPILER :=$(COMPILER_C) $(CFLAGS)
+endif
+ifdef COMPILER_CXX
+COMPILER :=$(COMPILER_CXX) $(CXXFLAGS) $(CFLAGS)
+endif
+
+all: $(OBJ_FILES)
+
+$(OBJ_FILES): $(OBJ_DIR)/%.o: %.$(SUFFIX)
+	@echo '[Compile]                ': $(TARGET) "<=" $<
+	$(COMPILER) -MMD -MP -MF $@.d $< -o $@ -c
+
+-include $(OBJ_FILES:%.o=%.o.d)
+
+.PHONY: all
